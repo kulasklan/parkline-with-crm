@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkLine CRM - Lead Management System</title>
+    <link rel="stylesheet" href="css/crm.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <img src="https://stackblitz.com/storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCQU1wYVFFPSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--9bb26cd6dc302105f9107bbc9d0ab7c80d8d60c9/ParkLine-logo.png" alt="ParkLine Logo" class="login-logo">
+                <h1>ParkLine CRM</h1>
+                <p>Lead Management System</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" required placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter your password">
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </button>
+                
+                <div id="loginMessage" class="login-message"></div>
+            </form>
+            
+            <div class="login-footer">
+                <p>Demo Credentials:</p>
+                <p><strong>Email:</strong> admin@izostone.mk</p>
+                <p><strong>Password:</strong> admin123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main CRM Dashboard -->
+    <div id="crmDashboard" class="crm-dashboard" style="display: none;">
+        <!-- Header -->
+        <header class="crm-header">
+            <div class="header-left">
+                <img src="https://stackblitz.com/storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCQU1wYVFFPSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--9bb26cd6dc302105f9107bbc9d0ab7c80d8d60c9/ParkLine-logo.png" alt="ParkLine" class="header-logo">
+                <h1>ParkLine CRM</h1>
+            </div>
+            
+            <div class="header-center">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="globalSearch" placeholder="Search leads, apartments, or notes...">
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <button class="header-btn" onclick="showNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">3</span>
+                </button>
+                
+                <div class="user-menu">
+                    <button class="user-btn" onclick="toggleUserMenu()">
+                        <img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&dpr=2" alt="User" class="user-avatar">
+                        <span id="currentUserName">Admin User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#" onclick="showSettings()"><i class="fas fa-cog"></i> Settings</a>
+                        <hr>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-view="dashboard" onclick="showView('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-view="leads" onclick="showView('leads')">
+                    <i class="fas fa-users"></i>
+                    <span>Leads</span>
+                    <span class="nav-badge" id="newLeadsBadge">5</span>
+                </a>
+                <a href="#" class="nav-item" data-view="apartments" onclick="showView('apartments')">
+                    <i class="fas fa-building"></i>
+                    <span>Apartments</span>
+                </a>
+                <a href="#" class="nav-item" data-view="analytics" onclick="showView('analytics')">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="nav-item" data-view="users" onclick="showView('users')">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Users</span>
+                </a>
+                <a href="#" class="nav-item" data-view="settings" onclick="showView('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="/" class="back-to-site">
+                    <i class="fas fa-external-link-alt"></i>
+                    Back to Website
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="view-content active">
+                <div class="view-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                    <div class="view-actions">
+                        <button class="btn btn-primary" onclick="refreshDashboard()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon new-leads">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="newLeadsCount">0</h3>
+                            <p>New Leads</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon active-leads">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="activeLeadsCount">0</h3>
+                            <p>Active Leads</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon closed-deals">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="closedDealsCount">0</h3>
+                            <p>Closed Deals</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon conversion-rate">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="conversionRate">0%</h3>
+                            <p>Conversion Rate</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-content">
+                    <div class="dashboard-section">
+                        <h3>Recent Leads</h3>
+                        <div id="recentLeadsList" class="recent-leads-list">
+                            <!-- Recent leads will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-section">
+                        <h3>Follow-up Reminders</h3>
+                        <div id="followUpList" class="follow-up-list">
+                            <!-- Follow-up reminders will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leads View -->
+            <div id="leadsView" class="view-content">
+                <div class="view-header">
+                    <h2><i class="fas fa-users"></i> Lead Management</h2>
+                    <div class="view-actions">
+                        <button class="btn btn-secondary" onclick="exportLeads()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <button class="btn btn-primary" onclick="showCreateLeadModal()">
+                            <i class="fas fa-plus"></i> Add Lead
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="leads-filters">
+                    <select id="statusFilter" onchange="filterLeads()">
+                        <option value="">All Statuses</option>
+                        <option value="new">New</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="qualified">Qualified</option>
+                        <option value="proposal">Proposal</option>
+                        <option value="negotiation">Negotiation</option>
+                        <option value="closed_won">Closed Won</option>
+                        <option value="closed_lost">Closed Lost</option>
+                        <option value="follow_up">Follow Up</option>
+                    </select>
+                    
+                    <select id="assigneeFilter" onchange="filterLeads()">
+                        <option value="">All Assignees</option>
+                        <!-- Will be populated with CRM users -->
+                    </select>
+                    
+                    <select id="priorityFilter" onchange="filterLeads()">
+                        <option value="">All Priorities</option>
+                        <option value="urgent">Urgent</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                
+                <div class="leads-table-container">
+                    <table class="leads-table" id="leadsTable">
+                        <thead>
+                            <tr>
+                                <th>Lead</th>
+                                <th>Contact</th>
+                                <th>Apartment</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Assigned To</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leadsTableBody">
+                            <!-- Leads will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Other views (apartments, analytics, users, settings) -->
+            <div id="apartmentsView" class="view-content">
+                <div class="view-header">
+                    <h2><i class="fas fa-building"></i> Apartment Management</h2>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-tools"></i>
+                    <h3>Coming Soon</h3>
+                    <p>Apartment management features will be available in the next update.</p>
+                </div>
+            </div>
+
+            <div id="analyticsView" class="view-content">
+                <div class="view-header">
+                    <h2><i class="fas fa-chart-bar"></i> Analytics</h2>
+                    <div class="view-actions">
+                        <button class="btn btn-secondary" onclick="window.open('/analytics.html', '_blank')">
+                            <i class="fas fa-external-link-alt"></i> Full Analytics
+                        </button>
+                    </div>
+                </div>
+                <div class="analytics-preview">
+                    <p>View detailed analytics in the <a href="/analytics.html" target="_blank">full analytics dashboard</a>.</p>
+                </div>
+            </div>
+
+            <div id="usersView" class="view-content">
+                <div class="view-header">
+                    <h2><i class="fas fa-user-cog"></i> User Management</h2>
+                    <div class="view-actions">
+                        <button class="btn btn-primary" onclick="showCreateUserModal()">
+                            <i class="fas fa-user-plus"></i> Add User
+                        </button>
+                    </div>
+                </div>
+                <div id="usersTableContainer">
+                    <!-- Users table will be populated here -->
+                </div>
+            </div>
+
+            <div id="settingsView" class="view-content">
+                <div class="view-header">
+                    <h2><i class="fas fa-cog"></i> CRM Settings</h2>
+                </div>
+                <div id="settingsContainer">
+                    <!-- Settings will be populated here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Lead Detail Modal -->
+    <div id="leadDetailModal" class="modal">
+        <div class="modal-content lead-detail-modal">
+            <div class="modal-header">
+                <h3 id="leadDetailTitle">Lead Details</h3>
+                <button class="modal-close" onclick="closeLeadDetailModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="lead-detail-content">
+                    <div class="lead-info-section">
+                        <h4>Contact Information</h4>
+                        <div id="leadContactInfo">
+                            <!-- Contact info will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="lead-management-section">
+                        <h4>Lead Management</h4>
+                        <div class="management-controls">
+                            <div class="control-group">
+                                <label for="leadStatus">Status:</label>
+                                <select id="leadStatus" onchange="updateLeadField('status', this.value)">
+                                    <option value="new">New</option>
+                                    <option value="contacted">Contacted</option>
+                                    <option value="qualified">Qualified</option>
+                                    <option value="proposal">Proposal</option>
+                                    <option value="negotiation">Negotiation</option>
+                                    <option value="closed_won">Closed Won</option>
+                                    <option value="closed_lost">Closed Lost</option>
+                                    <option value="follow_up">Follow Up</option>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="leadPriority">Priority:</label>
+                                <select id="leadPriority" onchange="updateLeadField('priority', this.value)">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="urgent">Urgent</option>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="leadAssignee">Assigned To:</label>
+                                <select id="leadAssignee" onchange="updateLeadField('assigned_to', this.value)">
+                                    <option value="">Unassigned</option>
+                                    <!-- Will be populated with CRM users -->
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="followUpDate">Follow-up Date:</label>
+                                <input type="datetime-local" id="followUpDate" onchange="updateLeadField('follow_up_date', this.value)">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="notes-section">
+                        <h4>Notes & Activities</h4>
+                        <div class="add-note-form">
+                            <textarea id="newNoteText" placeholder="Add a note..." rows="3"></textarea>
+                            <div class="note-controls">
+                                <select id="noteType">
+                                    <option value="general">General</option>
+                                    <option value="call">Phone Call</option>
+                                    <option value="email">Email</option>
+                                    <option value="meeting">Meeting</option>
+                                    <option value="follow_up">Follow-up</option>
+                                    <option value="internal">Internal</option>
+                                </select>
+                                <button class="btn btn-primary" onclick="addNote()">
+                                    <i class="fas fa-plus"></i> Add Note
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="notesAndActivities" class="notes-activities-list">
+                            <!-- Notes and activities will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Lead Modal -->
+    <div id="createLeadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Lead</h3>
+                <button class="modal-close" onclick="closeCreateLeadModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="createLeadForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="createLeadName">Name *</label>
+                            <input type="text" id="createLeadName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="createLeadEmail">Email *</label>
+                            <input type="email" id="createLeadEmail" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="createLeadPhone">Phone</label>
+                            <input type="tel" id="createLeadPhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="createLeadApartment">Apartment ID</label>
+                            <input type="text" id="createLeadApartment">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="createLeadMessage">Message *</label>
+                        <textarea id="createLeadMessage" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="createLeadPriority">Priority</label>
+                            <select id="createLeadPriority">
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="createLeadAssignee">Assign To</label>
+                            <select id="createLeadAssignee">
+                                <option value="">Auto-assign</option>
+                                <!-- Will be populated with CRM users -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeCreateLeadModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Lead</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading CRM...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/crm.js"></script>
+</body>
+</html>

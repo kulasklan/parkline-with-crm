@@ -1,0 +1,436 @@
+/* FILTERS PANEL - STICKY FOOTER SINGLE ROW LAYOUT */
+
+/* Mobile Filter Toggle Button - SHOW (when filters are hidden) */
+.filter-toggle-button-show {
+    display: none; /* Hidden on desktop by default */
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(42, 45, 58, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(154, 205, 50, 0.3);
+    border-radius: 8px;
+    padding: 12px 24px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-toggle-button-show:hover {
+    background: rgba(42, 45, 58, 1);
+    border-color: rgba(154, 205, 50, 0.5);
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.filter-toggle-button-show:active {
+    transform: translateX(-50%) translateY(0px);
+}
+
+/* Mobile Filter Toggle Button - HIDE (when filters are visible) */
+.filter-toggle-button-hide {
+    display: none; /* Hidden on desktop by default */
+    position: absolute;
+    top: -50px; /* Position above the filter panel */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(42, 45, 58, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(154, 205, 50, 0.3);
+    border-radius: 8px 8px 0 0; /* Square top corners only */
+    padding: 8px 16px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 160;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: none;
+}
+
+.filter-toggle-button-hide:hover {
+    background: rgba(42, 45, 58, 1);
+    border-color: rgba(154, 205, 50, 0.5);
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 -6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.filter-toggle-button-hide:active {
+    transform: translateX(-50%) translateY(0px);
+}
+
+.filter-toggle-icon {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+/* STICKY FOOTER - Main filter panel container */
+.filters-panel {
+    background: #2a2d3a;
+    border-radius: 16px;
+    padding: 16px 32px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    position: fixed; /* STICKY FOOTER */
+    bottom: 1rem; /* STICKY FOOTER */
+    left: 2rem; /* STICKY FOOTER */
+    right: 2rem; /* STICKY FOOTER */
+    max-width: 1400px; /* STICKY FOOTER */
+    margin: 0 auto; /* STICKY FOOTER */
+    left: 2rem; /* STICKY FOOTER */
+    margin-left: auto; /* STICKY FOOTER */
+    margin-right: auto; /* STICKY FOOTER */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: none;
+    backdrop-filter: none;
+    z-index: 100; /* STICKY FOOTER */
+    flex-shrink: 0;
+}
+
+/* Filter sections - HORIZONTAL layout */
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+    min-width: 120px;
+}
+
+/* Filter labels - COMPACT */
+.filter-label {
+    color: #a8adb7;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+    text-align: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* FIXED: СПАЛНИ СОБИ label positioning */
+.filter-section:nth-child(2) .filter-label {
+    /* Removed - positioning handled in responsive.css for mobile only */
+}
+
+/* BEDROOM FILTERS - HORIZONTAL */
+.bedroom-filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 6px;
+}
+
+#bedroomFilters {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Bedroom buttons - COMPACT + BIGGER FONT + NON-BOLD */
+.bedroom-btn {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid #4a5568;
+    background: transparent;
+    color: #a8adb7;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 400; /* CHANGED: Non-bold */
+    font-size: 16px; /* INCREASED: Bigger font */
+    text-align: center;
+    padding: 0;
+    box-shadow: none;
+    flex-shrink: 0;
+}
+
+.bedroom-btn:hover {
+    border-color: #9ACD32;
+    color: #9ACD32;
+    transform: translateY(-1px);
+    background: transparent;
+}
+
+.bedroom-btn.active {
+    background: #9ACD32;
+    border-color: #9ACD32;
+    color: #2a2d3a;
+}
+
+/* SLIDER CONTAINERS - COMPACT */
+.slider-container {
+    position: relative;
+    width: 100%;
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 140px;
+}
+
+/* Filter labels for sliders */
+.filter-section:not(:nth-child(1)) .filter-label {
+    margin-bottom: 4px;
+    margin-right: 0;
+}
+
+/* Dual slider setup - COMPACT */
+.dual-slider-container {
+    position: relative;
+    width: 100%;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.dual-slider {
+    position: relative;
+    width: 100%;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+/* Slider track - SMALLER */
+.slider-track-custom {
+    position: relative;
+    width: 100%;
+    height: 4px;
+    background: #4a5568;
+    border-radius: 2px;
+    cursor: pointer;
+    border: none;
+    box-shadow: none;
+}
+
+/* Active range between handles */
+.slider-range-custom {
+    position: absolute;
+    height: 100%;
+    background: #9ACD32;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    top: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Slider handles - SMALLER */
+.slider-handle-custom {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(145deg, #f4f6f8 0%, #e8eaed 50%, #dadce0 100%);
+    border: 1px solid #dadce0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    z-index: 10;
+    box-shadow: 
+        0 2px 6px rgba(0, 0, 0, 0.2),
+        0 1px 3px rgba(0, 0, 0, 0.15),
+        inset 0 1px 2px rgba(0, 0, 0, 0.15),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.slider-handle-custom::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(145deg, #e8eaed 0%, #f1f3f4 50%, #ffffff 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 
+        inset 0 2px 6px rgba(0, 0, 0, 0.2),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.4),
+        inset 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.slider-handle-custom:hover {
+    transform: translate(-50%, -50%) scale(0.98);
+    box-shadow: 
+        0 3px 8px rgba(0, 0, 0, 0.18),
+        0 2px 4px rgba(0, 0, 0, 0.12),
+        inset 0 1px 2px rgba(0, 0, 0, 0.12),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.6),
+        0 0 0 3px rgba(154, 205, 50, 0.3);
+}
+
+.slider-handle-custom:hover::before {
+    box-shadow: 
+        inset 0 2px 6px rgba(0, 0, 0, 0.15),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.slider-handle-custom:active {
+    transform: translate(-50%, -50%) scale(0.92);
+    box-shadow: 
+        0 1px 4px rgba(0, 0, 0, 0.25),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* UPDATED: Slider values - BIGGER FONT + NON-BOLD for СПАЛНИ СОБИ and ВКУПНО */
+.slider-values {
+    position: absolute;
+    top: -24px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    color: #e2e8f0;
+    font-size: 16px; /* INCREASED: Bigger font */
+    font-weight: 400; /* CHANGED: Non-bold */
+    pointer-events: none;
+    z-index: 15;
+    padding: 0; /* Remove padding to position correctly */
+}
+
+/* FIXED: Individual slider value positioning - offset by circle radius */
+.slider-values span:first-child {
+    transform: translateX(-12px); /* Move left by half circle diameter (24px/2) */
+}
+
+.slider-values span:last-child {
+    transform: translateX(12px); /* Move right by half circle diameter (24px/2) */
+}
+
+/* Clear button - PART OF SINGLE ROW + ACTIVE BY DEFAULT */
+.filter-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    gap: 8px;
+}
+
+.filter-btn.clear {
+    background: linear-gradient(135deg, #9ACD32 0%, #8FBC2A 100%); /* CHANGED: Active by default */
+    color: #2a2d3a; /* CHANGED: Active text color */
+    border: 1px solid #9ACD32; /* CHANGED: Active border */
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(154, 205, 50, 0.4); /* CHANGED: Active shadow */
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+/* UPDATED: Clear button inactive state */
+.filter-btn.clear.inactive {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    color: #e2e8f0;
+    border: 1px solid #4a5568;
+    box-shadow: none;
+    transform: none;
+}
+
+.filter-btn.clear.inactive:hover {
+    background: linear-gradient(135deg, #9ACD32 0%, #8FBC2A 100%);
+    border-color: #9ACD32;
+    color: #2a2d3a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(154, 205, 50, 0.4);
+}
+
+/* Rendexio link - subtle branding */
+.rendexio-link {
+    display: block;
+    font-size: 0.75rem; /* Increased by 30% */
+    color: #e5e7eb !important; /* FORCE: Even lighter color (30% more visible) */
+    opacity: 0.9 !important; /* Increased by 30% (was 0.7) */
+    text-decoration: none !important; /* FORCE: No underlines */
+    text-align: center;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    margin-top: 4px;
+    width: 100%;
+    clear: both; /* Ensure it goes below everything */
+    /* NUCLEAR OPTION: PREVENT ALL BROWSER LINK STYLING */
+    -webkit-text-fill-color: #d1d5db !important;
+    -webkit-appearance: none !important;
+    outline: none !important;
+    border: none !important;
+    /* FORCE all link states to custom color */
+    background: none !important;
+    border-bottom: none !important;
+}
+
+/* FORCE visited link colors */
+.rendexio-link:visited {
+    color: #e5e7eb !important;
+    -webkit-text-fill-color: #e5e7eb !important;
+    text-decoration: none !important;
+}
+
+/* FORCE active link colors */
+.rendexio-link:active {
+    color: #e5e7eb !important;
+    -webkit-text-fill-color: #e5e7eb !important;
+    text-decoration: none !important;
+}
+
+/* FORCE focus colors */
+.rendexio-link:focus {
+    color: #e5e7eb !important;
+    -webkit-text-fill-color: #e5e7eb !important;
+    outline: none !important;
+    text-decoration: none !important;
+}
+
+.rendexio-link:hover {
+    opacity: 1.0 !important; /* Full opacity on hover */
+    color: #f3f4f6 !important; /* FORCE: Even lighter on hover */
+    -webkit-text-fill-color: #f3f4f6 !important;
+    text-decoration: none !important;
+}
+
+/* Hide default inputs */
+.dual-slider input[type="range"] {
+    display: none;
+}
+
+.range-slider {
+    display: none;
+}

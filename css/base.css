@@ -1,0 +1,232 @@
+/* CSS Custom Properties for Premium Dark Theme */
+:root {
+    /* PREMIUM DARK THEME - Matching your preview exactly */
+    --primary-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    --glass-bg: rgba(15, 23, 42, 0.8);
+    --glass-border: rgba(148, 163, 184, 0.2);
+    --accent-orange: #f97316;
+    --accent-teal: #06b6d4;
+    --accent-yellow: #fbbf24;
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --text-secondary: rgba(148, 163, 184, 0.9);
+    --text-muted: rgba(148, 163, 184, 0.6);
+    --shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.6);
+    --shadow-xl: 0 35px 60px rgba(0, 0, 0, 0.7);
+    --border-radius: 20px;
+    --border-radius-sm: 12px;
+    --spacing-unit: 8px;
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Status Colors - EXACT COLORS FROM PREVIEW */
+    --status-free: #10b981;      /* Green for Free */
+    --status-reserved: #3b82f6;  /* Blue for Reserved */
+    --status-sold: #ef4444;      /* Red for Sold */
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--primary-gradient);
+    min-height: 100vh;
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.6;
+    transition: var(--transition);
+}
+
+/* Header Styles */
+.header {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 70px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+}
+
+.logo-image {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    max-width: 200px;
+}
+
+/* Contact Info Styling */
+.contact-info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    transition: var(--transition);
+}
+
+.contact-info:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.phone-icon {
+    width: 20px;
+    height: 20px;
+    fill: var(--accent-orange);
+    flex-shrink: 0;
+}
+
+/* Phone group styling */
+.phone-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Email link styling */
+.email-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.email-link:hover {
+    color: var(--accent-teal);
+}
+
+/* Language Switcher */
+.language-switcher {
+    /* Base styles - positioning handled by specific classes */
+}
+
+.language-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.language-btn:hover {
+    color: var(--accent-orange);
+}
+
+/* Language Switcher in Image Area */
+.language-switcher-image-top-right {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 0.5rem 0.75rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.language-switcher-image-top-right .language-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.language-switcher-image-top-right .language-btn:hover {
+    color: var(--accent-orange);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* FIXED: Main Container Layout for sticky footer */
+.main-container {
+    margin-top: 70px;
+    height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem 0 2rem; /* Remove bottom padding */
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+/* FIXED: Content Area Layout - account for sticky footer */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: 1rem;
+    padding-bottom: 0; /* Remove bottom padding */
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(148, 163, 184, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(6, 182, 212, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(6, 182, 212, 0.7);
+}
+
+/* Backdrop blur fallback */
+@supports not (backdrop-filter: blur(10px)) {
+    .header,
+    .apartment-details,
+    .filters-panel,
+    .modal-content {
+        background: rgba(15, 23, 42, 0.95);
+    }
+}

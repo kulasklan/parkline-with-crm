@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Anchor System Test - Enhanced</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .header h1 {
+            color: #f59e0b;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        .test-section {
+            background: rgba(55, 65, 81, 0.8);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        .apartment-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .apartment-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #111827;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .apartment-btn:hover {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        }
+        .apartment-btn.active {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+        }
+        .apartment-frame {
+            background: rgba(17, 24, 39, 0.9);
+            border: 2px solid #f59e0b;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            min-height: 300px;
+        }
+        .apartment-frame h3 {
+            color: #f59e0b;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        .detail-label {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+        .detail-value {
+            color: white;
+            font-weight: 600;
+        }
+        .link-value {
+            color: #06b6d4 !important;
+            text-decoration: underline !important;
+            cursor: pointer !important;
+            font-weight: bold !important;
+        }
+        .link-value:hover {
+            color: #0891b2 !important;
+        }
+        .status-free { color: #10b981 !important; }
+        .status-reserved { color: #3b82f6 !important; }
+        .status-sold { color: #ef4444 !important; }
+        .filter-preview {
+            background: rgba(17, 24, 39, 0.9);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .filter-preview h4 {
+            color: #f59e0b;
+            margin-bottom: 15px;
+        }
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .filter-label {
+            color: #9ca3af;
+            font-weight: 500;
+            min-width: 100px;
+        }
+        .bedroom-btn {
+            background: rgba(6, 182, 212, 0.2);
+            border: 1px solid #06b6d4;
+            color: #06b6d4;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin: 2px;
+            font-weight: 500;
+        }
+        .range-display {
+            color: white;
+            font-weight: 600;
+            background: rgba(6, 182, 212, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #06b6d4;
+        }
+        .debug-section {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #374151;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .debug-section h4 {
+            color: #f59e0b;
+            margin-bottom: 15px;
+        }
+        .debug-content {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            color: #9ca3af;
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        button {
+            background: linear-gradient(135deg, #374151, #4b5563);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #4b5563, #6b7280);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .warning { color: #f59e0b; }
+        .url-display {
+            background: #000; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-family: monospace; 
+            font-size: 12px; 
+            word-break: break-all;
+            border: 1px solid #374151;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .stat-card {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid #06b6d4;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #06b6d4;
+        }
+        .stat-label {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .controls { flex-direction: column; align-items: center; }
+            .apartment-selector { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔍 Google Sheets Anchor System Test</h1>
+        <p>Enhanced testing tool for your anchor-based Google Sheets integration system</p>
+        <div class="controls">
+            <button onclick="loadAndParseData()">📊 Load & Parse Data</button>
+            <button onclick="showDebugInfo()">🔧 Show Debug Info</button>
+            <button onclick="testAreaDetection()">📐 Test Area Detection</button>
+            <button onclick="clearResults()">🧹 Clear Results</button>
+            <button onclick="exportResults()">💾 Export Results</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>📍 CSV URL Being Tested:</h3>
+        <div class="url-display" id="urlDisplay">
+            https://docs.google.com/spreadsheets/d/e/2PACX-1vRbcdn1I9Swtzrf7bfK_pueLsF2HPNj5ZTMSZ8vA1KDRnASBlvtIhzUQ8D8zEoQ66Fvd8_lPf38sg2S/pub?output=csv
+        </div>
+        <div style="margin-top: 1rem;">
+            <button onclick="updateUrl()" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+                🔄 Update URL
+            </button>
+        </div>
+    </div>
+
+    <div class="test-section" id="statsSection" style="display: none;">
+        <h3>📊 Data Statistics:</h3>
+        <div class="stats-grid" id="statsGrid">
+            <!-- Stats will be populated here -->
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🏠 Select Apartment to Test:</h3>
+        <div class="apartment-selector" id="apartmentSelector">
+            <!-- Apartment buttons will be populated here -->
+        </div>
+        
+        <div class="apartment-frame" id="apartmentFrame" style="display: none;">
+            <h3 id="apartmentTitle">Apartment Details</h3>
+            <div class="detail-grid" id="apartmentDetails">
+                <!-- Apartment details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🎛️ Generated Filters Preview:</h3>
+        <div class="filter-preview" id="filterPreview">
+            <!-- Filter preview will be populated here -->
+        </div>
+    </div>
+
+    <div class="test-section" id="areaDetectionSection" style="display: none;">
+        <h3>📐 Area Detection Analysis:</h3>
+        <div id="areaDetectionResults">
+            <!-- Area detection results will be populated here -->
+        </div>
+    </div>
+
+    <div class="debug-section" id="debugSection" style="display: none;">
+        <h4>🔧 Debug Information</h4>
+        <div class="debug-content" id="debugContent"></div>
+    </div>
+
+    <script>
+        // ENHANCED: Configuration
+        let CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbcdn1I9Swtzrf7bfK_pueLsF2HPNj5ZTMSZ8vA1KDRnASBlvtIhzUQ8D8zEoQ66Fvd8_lPf38sg2S/pub?output=csv';
+        
+        let parsedData = null;
+        let selectedApartment = null;
+        let areaDetectionStats = null;
+
+        // Parse CSV line handling quotes and commas
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim().replace(/"/g, ''));
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim().replace(/"/g, ''));
+            return result;
+        }
+
+        // ENHANCED: Main parsing function with better error handling
+        async function loadAndParseData() {
+            try {
+                console.log('🔄 Loading data from Google Sheets...');
+                document.getElementById('statsSection').style.display = 'none';
+                
+                const response = await fetch(CSV_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const csvText = await response.text();
+                const lines = csvText.split('\n').filter(line => line.trim());
+                
+                console.log(`📄 Loaded ${lines.length} lines from CSV`);
+                
+                // Parse according to anchor system
+                parsedData = parseAnchorSystem(lines);
+                
+                if (parsedData.success) {
+                    console.log('✅ Data parsed successfully!');
+                    
+                    // Enhanced area detection
+                    runAreaDetection();
+                    
+                    // Display results
+                    displayResults();
+                    displayStatistics();
+                } else {
+                    console.error('❌ Parsing failed:', parsedData.error);
+                    alert('Parsing failed: ' + parsedData.error);
+                }
+
+            } catch (error) {
+                console.error('❌ Error loading data:', error);
+                alert('Error loading data: ' + error.message);
+            }
+        }
+
+        function parseAnchorSystem(lines) {
+            try {
+                console.log('🔍 Starting enhanced anchor system parsing...');
+                
+                // Step 1: Find anchor1 and anchor2 in row 1 (index 0)
+                const row1 = parseCSVLine(lines[0]);
+                let anchor1Index = -1;
+                let anchor2Index = -1;
+                
+                for (let i = 0; i < row1.length; i++) {
+                    if (row1[i].toLowerCase().includes('anchor1')) {
+                        anchor1Index = i;
+                    }
+                    if (row1[i].toLowerCase().includes('anchor2')) {
+                        anchor2Index = i;
+                    }
+                }
+                
+                if (anchor1Index === -1 || anchor2Index === -1) {
+                    return { success: false, error: 'Could not find anchor1 or anchor2 in row 1' };
+                }
+                
+                console.log(`📍 Found anchors: anchor1 at column ${anchor1Index + 1}, anchor2 at column ${anchor2Index + 1}`);
+                
+                // Step 2: Parse status legend (rows 2-4, columns to the RIGHT of anchor2)
+                const statusLegend = {};
+                for (let rowIndex = 1; rowIndex <= 3; rowIndex++) {
+                    if (rowIndex < lines.length) {
+                        const row = parseCSVLine(lines[rowIndex]);
+                        const statusValue = row[anchor2Index + 1] || '';
+                        const displayText = row[anchor2Index + 2] || '';
+                        
+                        if (statusValue && displayText) {
+                            statusLegend[statusValue] = displayText;
+                            console.log(`📋 Status mapping: ${statusValue} = ${displayText}`);
+                        }
+                    }
+                }
+                
+                // Step 3: Parse row 8 (filter keywords), row 9 (checkboxes), row 10 (subjects)
+                const row8 = lines[7] ? parseCSVLine(lines[7]) : [];
+                const row9 = lines[8] ? parseCSVLine(lines[8]) : [];
+                const row10 = lines[9] ? parseCSVLine(lines[9]) : [];
+                
+                const columnConfig = [];
+                
+                for (let i = anchor1Index + 1; i < anchor2Index; i++) {
+                    const filterKeyword = row8[i] || '';
+                    const checkbox = row9[i] || '';
+                    const subject = row10[i] || '';
+                    
+                    const isChecked = checkbox === '☑' || checkbox.toLowerCase().includes('true') || checkbox === '1';
+                    
+                    columnConfig.push({
+                        columnIndex: i,
+                        filterKeyword: filterKeyword,
+                        isVisible: isChecked,
+                        subject: subject,
+                        columnLetter: String.fromCharCode(65 + i)
+                    });
+                    
+                    console.log(`📊 Column ${String.fromCharCode(65 + i)}: ${subject} (${filterKeyword}) - Visible: ${isChecked}`);
+                }
+                
+                // Step 4: Parse apartment data (row 11+)
+                const apartments = [];
+                for (let rowIndex = 10; rowIndex < lines.length; rowIndex++) {
+                    const row = parseCSVLine(lines[rowIndex]);
+                    if (row.length > anchor1Index && row[anchor1Index + 1]) {
+                        const apartment = {
+                            id: row[anchor1Index + 1],
+                            rowIndex: rowIndex,
+                            data: {},
+                            area: null,
+                            areaDetectionMethod: null
+                        };
+                        
+                        // Parse all data columns
+                        columnConfig.forEach(config => {
+                            const value = row[config.columnIndex] || '';
+                            apartment.data[config.subject] = {
+                                value: value,
+                                isVisible: config.isVisible,
+                                filterKeyword: config.filterKeyword,
+                                columnIndex: config.columnIndex
+                            };
+                        });
+                        
+                        apartments.push(apartment);
+                    }
+                }
+                
+                console.log(`🏠 Parsed ${apartments.length} apartments`);
+                
+                return {
+                    success: true,
+                    anchor1Index: anchor1Index,
+                    anchor2Index: anchor2Index,
+                    statusLegend: statusLegend,
+                    columnConfig: columnConfig,
+                    apartments: apartments,
+                    rawLines: lines
+                };
+                
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        // ENHANCED: Area detection with multiple strategies
+        function runAreaDetection() {
+            if (!parsedData || !parsedData.apartments) return;
+            
+            console.log('📐 Running enhanced area detection...');
+            
+            areaDetectionStats = {
+                byKeyword: 0,
+                bySubject: 0,
+                byPattern: 0,
+                byDefault: 0,
+                total: parsedData.apartments.length
+            };
+            
+            parsedData.apartments.forEach(apartment => {
+                let areaFound = false;
+                let detectionMethod = '';
+                
+                // Strategy 1: Filter keyword matching
+                Object.entries(apartment.data).forEach(([subject, fieldData]) => {
+                    if (areaFound) return;
+                    
+                    const keyword = fieldData.filterKeyword?.toLowerCase() || '';
+                    const value = fieldData.value?.toString().trim() || '';
+                    
+                    if (keyword.includes('area') || keyword === 'net area') {
+                        const areaValue = parseFloat(value);
+                        if (!isNaN(areaValue) && areaValue > 15 && areaValue < 500) {
+                            apartment.area = areaValue;
+                            apartment.areaDetectionMethod = `Keyword: "${keyword}"`;
+                            areaFound = true;
+                            detectionMethod = 'byKeyword';
+                            areaDetectionStats.byKeyword++;
+                        }
+                    }
+                });
+                
+                // Strategy 2: Subject name pattern matching
+                if (!areaFound) {
+                    Object.entries(apartment.data).forEach(([subject, fieldData]) => {
+                        if (areaFound) return;
+                        
+                        const value = fieldData.value?.toString().trim() || '';
+                        const subjectLower = subject.toLowerCase();
+                        
+                        const areaPatterns = ['вкупно', 'net area', 'total area', 'area', 'м²', 'm2'];
+                        const hasAreaPattern = areaPatterns.some(pattern => subjectLower.includes(pattern));
+                        
+                        if (hasAreaPattern) {
+                            const areaValue = parseFloat(value);
+                            if (!isNaN(areaValue) && areaValue > 15 && areaValue < 500) {
+                                apartment.area = areaValue;
+                                apartment.areaDetectionMethod = `Subject: "${subject}"`;
+                                areaFound = true;
+                                detectionMethod = 'bySubject';
+                                areaDetectionStats.bySubject++;
+                            }
+                        }
+                    });
+                }
+                
+                // Strategy 3: Pattern analysis
+                if (!areaFound) {
+                    const candidateValues = [];
+                    
+                    Object.entries(apartment.data).forEach(([subject, fieldData]) => {
+                        const value = fieldData.value?.toString().trim() || '';
+                        const numValue = parseFloat(value);
+                        
+                        if (!isNaN(numValue) && numValue >= 20 && numValue <= 300) {
+                            candidateValues.push({
+                                value: numValue,
+                                subject: subject,
+                                columnIndex: fieldData.columnIndex || 0,
+                                priority: calculateAreaPriority(subject, fieldData.columnIndex)
+                            });
+                        }
+                    });
+                    
+                    if (candidateValues.length > 0) {
+                        candidateValues.sort((a, b) => b.priority - a.priority);
+                        const bestCandidate = candidateValues[0];
+                        
+                        apartment.area = bestCandidate.value;
+                        apartment.areaDetectionMethod = `Pattern: "${bestCandidate.subject}" (priority: ${bestCandidate.priority})`;
+                        areaFound = true;
+                        detectionMethod = 'byPattern';
+                        areaDetectionStats.byPattern++;
+                    }
+                }
+                
+                // Strategy 4: Default
+                if (!areaFound) {
+                    apartment.area = 80;
+                    apartment.areaDetectionMethod = 'Default value';
+                    detectionMethod = 'byDefault';
+                    areaDetectionStats.byDefault++;
+                }
+            });
+            
+            console.log('📊 Area detection completed:', areaDetectionStats);
+        }
+
+        function calculateAreaPriority(subject, columnIndex) {
+            let priority = 0;
+            
+            if (columnIndex >= 3) priority += 10;
+            if (columnIndex >= 5) priority += 5;
+            
+            const subjectLower = subject.toLowerCase();
+            if (subjectLower.includes('area')) priority += 20;
+            if (subjectLower.includes('вкупно')) priority += 25;
+            if (subjectLower.includes('total')) priority += 15;
+            if (subjectLower.includes('м²') || subjectLower.includes('m2')) priority += 15;
+            
+            if (subjectLower.includes('price')) priority -= 20;
+            if (subjectLower.includes('floor')) priority -= 15;
+            
+            return priority;
+        }
+
+        // ENHANCED: Display statistics
+        function displayStatistics() {
+            if (!parsedData) return;
+            
+            const statsSection = document.getElementById('statsSection');
+            const statsGrid = document.getElementById('statsGrid');
+            
+            const stats = [
+                { label: 'Total Apartments', value: parsedData.apartments.length, color: '#06b6d4' },
+                { label: 'Columns Found', value: parsedData.columnConfig.length, color: '#10b981' },
+                { label: 'Status Mappings', value: Object.keys(parsedData.statusLegend).length, color: '#f59e0b' },
+                { label: 'Visible Fields', value: parsedData.columnConfig.filter(c => c.isVisible).length, color: '#8b5cf6' }
+            ];
+            
+            if (areaDetectionStats) {
+                stats.push(
+                    { label: 'Area by Keyword', value: areaDetectionStats.byKeyword, color: '#10b981' },
+                    { label: 'Area by Subject', value: areaDetectionStats.bySubject, color: '#3b82f6' },
+                    { label: 'Area by Pattern', value: areaDetectionStats.byPattern, color: '#f59e0b' },
+                    { label: 'Area by Default', value: areaDetectionStats.byDefault, color: '#ef4444' }
+                );
+            }
+            
+            statsGrid.innerHTML = stats.map(stat => `
+                <div class="stat-card">
+                    <div class="stat-value" style="color: ${stat.color}">${stat.value}</div>
+                    <div class="stat-label">${stat.label}</div>
+                </div>
+            `).join('');
+            
+            statsSection.style.display = 'block';
+        }
+
+        function displayResults() {
+            if (!parsedData) return;
+            
+            // Display apartment selector
+            const selector = document.getElementById('apartmentSelector');
+            selector.innerHTML = '';
+            
+            parsedData.apartments.slice(0, 12).forEach((apartment, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'apartment-btn';
+                btn.textContent = `Apartment ${apartment.id}`;
+                btn.onclick = () => selectApartment(apartment);
+                selector.appendChild(btn);
+            });
+            
+            // Display filter preview
+            displayFilterPreview();
+            
+            // Auto-select first apartment
+            if (parsedData.apartments.length > 0) {
+                selectApartment(parsedData.apartments[0]);
+            }
+        }
+
+        function selectApartment(apartment) {
+            selectedApartment = apartment;
+            
+            // Update button states
+            document.querySelectorAll('.apartment-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Display apartment details
+            const frame = document.getElementById('apartmentFrame');
+            const title = document.getElementById('apartmentTitle');
+            const details = document.getElementById('apartmentDetails');
+            
+            title.textContent = `Apartment ${apartment.id} Details`;
+            details.innerHTML = '';
+            
+            // Enhanced details display
+            Object.entries(apartment.data).forEach(([subject, fieldData]) => {
+                if (fieldData.isVisible && fieldData.value && fieldData.value.trim() !== '') {
+                    const detailItem = document.createElement('div');
+                    detailItem.className = 'detail-item';
+                    
+                    let displayValue = fieldData.value;
+                    let valueClass = 'detail-value';
+                    
+                    // Enhanced field processing
+                    if (fieldData.filterKeyword === 'STATUS') {
+                        const statusValue = fieldData.value;
+                        const statusText = parsedData.statusLegend[statusValue] || statusValue;
+                        
+                        if (statusValue === '1') valueClass += ' status-free';
+                        else if (statusValue === '2') valueClass += ' status-reserved';
+                        else if (statusValue === '3') valueClass += ' status-sold';
+                        
+                        displayValue = `${getStatusIcon(statusValue)} ${statusText}`;
+                    }
+                    else if (subject.toLowerCase().includes('album') || subject.toLowerCase().includes('view')) {
+                        if (fieldData.value && fieldData.value.startsWith('http')) {
+                            displayValue = `<a href="${fieldData.value}" target="_blank" class="link-value">🔗 View</a>`;
+                        } else {
+                            displayValue = '🔗 Link';
+                        }
+                    }
+                    else if (fieldData.filterKeyword === 'AREA' || subject.toLowerCase().includes('area')) {
+                        displayValue = `📐 ${fieldData.value} m²`;
+                    }
+                    
+                    detailItem.innerHTML = `
+                        <span class="detail-label">${subject}:</span>
+                        <span class="${valueClass}">${displayValue}</span>
+                    `;
+                    
+                    details.appendChild(detailItem);
+                }
+            });
+            
+            // Add area detection info
+            if (apartment.area && apartment.areaDetectionMethod) {
+                const areaDetectionItem = document.createElement('div');
+                areaDetectionItem.className = 'detail-item';
+                areaDetectionItem.style.borderTop = '2px solid #f59e0b';
+                areaDetectionItem.style.marginTop = '1rem';
+                areaDetectionItem.style.paddingTop = '1rem';
+                
+                areaDetectionItem.innerHTML = `
+                    <span class="detail-label">🔍 Area Detection:</span>
+                    <span class="detail-value" style="color: #f59e0b;">${apartment.areaDetectionMethod}</span>
+                `;
+                
+                details.appendChild(areaDetectionItem);
+            }
+            
+            frame.style.display = 'block';
+        }
+
+        function getStatusIcon(statusValue) {
+            const icons = { '1': '✅', '2': '🔒', '3': '❌' };
+            return icons[statusValue] || '❓';
+        }
+
+        function displayFilterPreview() {
+            const filterPreview = document.getElementById('filterPreview');
+            filterPreview.innerHTML = '';
+            
+            if (!parsedData) return;
+            
+            // Find filter columns
+            const bedroomsConfig = parsedData.columnConfig.find(c => c.filterKeyword === 'BEDROOMS');
+            const floorsConfig = parsedData.columnConfig.find(c => c.filterKeyword === 'FLOORS');
+            const areaConfig = parsedData.columnConfig.find(c => c.filterKeyword === 'AREA');
+            
+            // Bedrooms filter
+            if (bedroomsConfig) {
+                const bedroomValues = [...new Set(parsedData.apartments.map(apt => 
+                    parseInt(apt.data[bedroomsConfig.subject]?.value) || 0
+                ).filter(v => v > 0))].sort((a, b) => a - b);
+                
+                const bedroomRow = document.createElement('div');
+                bedroomRow.className = 'filter-row';
+                bedroomRow.innerHTML = `
+                    <span class="filter-label">${bedroomsConfig.subject}:</span>
+                    ${bedroomValues.map(val => `<span class="bedroom-btn">${val}</span>`).join('')}
+                `;
+                filterPreview.appendChild(bedroomRow);
+            }
+            
+            // Floors filter
+            if (floorsConfig) {
+                const floorValues = parsedData.apartments.map(apt => 
+                    parseInt(apt.data[floorsConfig.subject]?.value) || 0
+                ).filter(v => v > 0);
+                const minFloor = Math.min(...floorValues);
+                const maxFloor = Math.max(...floorValues);
+                
+                const floorRow = document.createElement('div');
+                floorRow.className = 'filter-row';
+                floorRow.innerHTML = `
+                    <span class="filter-label">${floorsConfig.subject}:</span>
+                    <span class="range-display">🏗️ ${minFloor} - ${maxFloor}</span>
+                `;
+                filterPreview.appendChild(floorRow);
+            }
+            
+            // Area filter - ENHANCED
+            const areaValues = parsedData.apartments.map(apt => apt.area).filter(a => a && a > 0);
+            if (areaValues.length > 0) {
+                const minArea = Math.min(...areaValues);
+                const maxArea = Math.max(...areaValues);
+                const avgArea = Math.round(areaValues.reduce((sum, area) => sum + area, 0) / areaValues.length);
+                
+                const areaRow = document.createElement('div');
+                areaRow.className = 'filter-row';
+                areaRow.innerHTML = `
+                    <span class="filter-label">Detected Areas:</span>
+                    <span class="range-display">📐 ${minArea} - ${maxArea} m² (avg: ${avgArea})</span>
+                `;
+                filterPreview.appendChild(areaRow);
+            }
+        }
+
+        // NEW: Test area detection specifically
+        function testAreaDetection() {
+            if (!parsedData) {
+                alert('Please load data first');
+                return;
+            }
+            
+            const section = document.getElementById('areaDetectionSection');
+            const results = document.getElementById('areaDetectionResults');
+            
+            let html = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value success">${areaDetectionStats.byKeyword}</div>
+                        <div class="stat-label">By Keyword</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value warning">${areaDetectionStats.bySubject}</div>
+                        <div class="stat-label">By Subject</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #3b82f6">${areaDetectionStats.byPattern}</div>
+                        <div class="stat-label">By Pattern</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value error">${areaDetectionStats.byDefault}</div>
+                        <div class="stat-label">By Default</div>
+                    </div>
+                </div>
+                <h4 style="color: #f59e0b; margin: 2rem 0 1rem 0;">Sample Detection Results:</h4>
+            `;
+            
+            parsedData.apartments.slice(0, 8).forEach(apt => {
+                const methodColor = apt.areaDetectionMethod.includes('Keyword') ? '#10b981' :
+                                  apt.areaDetectionMethod.includes('Subject') ? '#f59e0b' :
+                                  apt.areaDetectionMethod.includes('Pattern') ? '#3b82f6' : '#ef4444';
+                
+                html += `
+                    <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid ${methodColor};">
+                        <strong style="color: white;">${apt.id}</strong>: 
+                        <span style="color: ${methodColor};">${apt.area} m²</span> - 
+                        <span style="color: #9ca3af; font-size: 0.875rem;">${apt.areaDetectionMethod}</span>
+                    </div>
+                `;
+            });
+            
+            results.innerHTML = html;
+            section.style.display = 'block';
+        }
+
+        function updateUrl() {
+            const newUrl = prompt('Enter new Google Sheets CSV URL:', CSV_URL);
+            if (newUrl && newUrl.trim()) {
+                CSV_URL = newUrl.trim();
+                document.getElementById('urlDisplay').textContent = CSV_URL;
+                console.log('🔄 URL updated:', CSV_URL);
+            }
+        }
+
+        function showDebugInfo() {
+            const debugSection = document.getElementById('debugSection');
+            const debugContent = document.getElementById('debugContent');
+            
+            if (!parsedData) {
+                debugContent.textContent = 'No data loaded. Please load data first.';
+                debugSection.style.display = 'block';
+                return;
+            }
+            
+            const debugInfo = `
+🔍 ENHANCED ANCHOR SYSTEM DEBUG INFO:
+
+📍 Anchors Found:
+- anchor1: Column ${parsedData.anchor1Index + 1} (${String.fromCharCode(65 + parsedData.anchor1Index)})
+- anchor2: Column ${parsedData.anchor2Index + 1} (${String.fromCharCode(65 + parsedData.anchor2Index)})
+
+📋 Status Legend:
+${Object.entries(parsedData.statusLegend).map(([key, value]) => `- ${key}: ${value}`).join('\n')}
+
+📊 Column Configuration:
+${parsedData.columnConfig.map(config => 
+    `- ${config.columnLetter}: "${config.subject}" (${config.filterKeyword}) - Visible: ${config.isVisible}`
+).join('\n')}
+
+🏠 Apartments Found: ${parsedData.apartments.length}
+
+📐 Area Detection Statistics:
+- By Keyword: ${areaDetectionStats.byKeyword} (${Math.round(areaDetectionStats.byKeyword/areaDetectionStats.total*100)}%)
+- By Subject: ${areaDetectionStats.bySubject} (${Math.round(areaDetectionStats.bySubject/areaDetectionStats.total*100)}%)
+- By Pattern: ${areaDetectionStats.byPattern} (${Math.round(areaDetectionStats.byPattern/areaDetectionStats.total*100)}%)
+- By Default: ${areaDetectionStats.byDefault} (${Math.round(areaDetectionStats.byDefault/areaDetectionStats.total*100)}%)
+
+📄 Sample Apartment Data (First Apartment):
+${selectedApartment ? 
+    Object.entries(selectedApartment.data).map(([subject, data]) => 
+        `- ${subject}: "${data.value}" (Visible: ${data.isVisible}, Keyword: "${data.filterKeyword}")`
+    ).join('\n') 
+    : 'No apartment selected'
+}
+
+🔧 Raw CSV Info:
+- Total lines: ${parsedData.rawLines.length}
+- Columns between anchors: ${parsedData.anchor2Index - parsedData.anchor1Index - 1}
+- URL: ${CSV_URL}
+            `;
+            
+            debugContent.textContent = debugInfo;
+            debugSection.style.display = 'block';
+        }
+
+        function exportResults() {
+            if (!parsedData) {
+                alert('No data to export. Please load data first.');
+                return;
+            }
+            
+            const exportData = {
+                timestamp: new Date().toISOString(),
+                url: CSV_URL,
+                statistics: areaDetectionStats,
+                apartments: parsedData.apartments.map(apt => ({
+                    id: apt.id,
+                    area: apt.area,
+                    areaDetectionMethod: apt.areaDetectionMethod,
+                    visibleFields: Object.entries(apt.data)
+                        .filter(([_, field]) => field.isVisible)
+                        .map(([subject, field]) => ({ subject, value: field.value, keyword: field.filterKeyword }))
+                })),
+                columnConfig: parsedData.columnConfig,
+                statusLegend: parsedData.statusLegend
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `parkline-test-results-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearResults() {
+            document.getElementById('apartmentSelector').innerHTML = '';
+            document.getElementById('apartmentFrame').style.display = 'none';
+            document.getElementById('filterPreview').innerHTML = '';
+            document.getElementById('debugSection').style.display = 'none';
+            document.getElementById('statsSection').style.display = 'none';
+            document.getElementById('areaDetectionSection').style.display = 'none';
+            parsedData = null;
+            selectedApartment = null;
+            areaDetectionStats = null;
+        }
+
+        // Auto-load data when page loads
+        window.addEventListener('load', () => {
+            console.log('🚀 Enhanced Google Sheets Anchor System Test Ready');
+            console.log('Click "Load & Parse Data" to test your system');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkLine Residences - Premium Apartment Visualization</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/building.css">
+    <link rel="stylesheet" href="css/filters.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/form.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <!-- ParkLine Logo - CLICKABLE LINK -->
+            <img src="https://stackblitz.com/storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCQU1wYVFFPSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--9bb26cd6dc302105f9107bbc9d0ab7c80d8d60c9/ParkLine-logo.png" alt="ParkLine Logo" class="logo-image" 
+                 style="height: 40px; width: auto; object-fit: contain; cursor: pointer;" 
+                 onclick="window.open('https://izostone.mk/', '_blank')"
+                 onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block';">
+            
+            <!-- Fallback text logo if image fails - CLICKABLE LINK -->
+            <h1 class="logo logo-fallback" 
+                style="display: none; cursor: pointer;" 
+                onclick="window.open('https://izostone.mk/', '_blank')">PARKLINE</h1>
+            
+            <!-- Language Switcher - Will be created by i18n.js -->
+            
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <div class="phone-group">
+                    <svg class="phone-icon" viewBox="0 0 24 24">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.15 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                    </svg>
+                    +389 76 22 00 88
+                </div>
+                <a href="mailto:contact@izostone.mk?subject=%D0%A1%D0%B5%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D0%B8%D1%80%D0%B0%D0%BC%20%D0%B7%D0%B0%20%D0%BF%D0%BE%D0%B2%D0%B5%D1%9B%D0%B5%20%D0%B8%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D0%B8" class="email-link">contact@izostone.mk</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- View Switcher Arrow -->
+        <div class="view-switcher">
+            <button class="view-arrow" onclick="switchView()" id="viewArrow">
+                <span class="arrow-icon">→</span>
+            </button>
+            <div class="view-indicator" id="viewIndicator" data-i18n="view-1">Поглед 1</div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Building Visualization Container -->
+            <div class="building-container">
+                <!-- Background Images -->
+                <div class="background-wrapper">
+                    <img src="https://stackblitz.com/storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCQUVwYVFFPSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--449a94459c5f728ce9c622f951400e2aecb434c7/background.png" alt="ParkLine Building View 1" class="background-image active" id="background1">
+                    <img src="https://stackblitz.com/storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCQVFwYVFFPSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--e7ebf887764733fa38c946c4bf086e9ea8470197/background2.png" alt="ParkLine Building View 2" class="background-image" id="background2">
+                </div>
+
+                <!-- SVG Overlays -->
+                <div class="svg-overlay" id="svgOverlay1">
+                    <!-- View 1 SVG shapes will be loaded here -->
+                </div>
+                <div class="svg-overlay" id="svgOverlay2" style="display: none;">
+                    <!-- View 2 SVG shapes will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Apartment Details Panel -->
+        <div class="apartment-details" id="apartmentDetails" style="display: none;">
+            <div class="details-header">
+                <h3 id="apartmentTitle" data-i18n="apartment-details">Детали за станот</h3>
+                <button class="close-btn" onclick="closeApartmentDetails()">×</button>
+            </div>
+            <div class="details-content" id="detailsContent">
+                <!-- Apartment details will be populated here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Form Toggle Button -->
+    <button class="form-toggle-btn" id="formToggleBtn" onclick="showContactForm()" style="display: none;">
+        ✉️
+    </button>
+
+    <!-- Client Request Form Section -->
+    <section class="contact-form-section" id="contactFormSection">
+        <div class="form-container">
+            <button class="form-close-btn" onclick="hideContactForm()" style="display: none;">×</button>
+            
+            <h2 data-i18n="contact-form-title">Contact Us</h2>
+            <p data-i18n="contact-form-description">Fill out the form below to inquire about an apartment or for general questions.</p>
+
+            <form id="leadsForm" class="leads-form">
+                <div class="form-group">
+                    <label for="name" data-i18n="form-name-label">Name:</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" data-i18n="form-email-label">Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" data-i18n="form-phone-label">Phone (Optional):</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                </div>
+
+                <div class="form-group">
+                    <label for="message" data-i18n="form-message-label">Message:</label>
+                    <textarea id="message" name="message" rows="5" required placeholder="Tell us about your inquiry or questions"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="apartment_id" data-i18n="form-apartment-id-label">Apartment ID (Optional):</label>
+                    <input type="text" id="apartment_id" name="apartment_id" placeholder="e.g., 1.5, ДП1">
+                </div>
+
+                <button type="submit" class="submit-btn" data-i18n="form-submit-button">Send Inquiry</button>
+                <p id="formMessage" class="form-message"></p>
+            </form>
+        </div>
+    </section>
+
+    <!-- Mobile Status Legend - Shows when filters are hidden -->
+    <div class="status-legend" id="statusLegend">
+        <div class="legend-item">
+            <span class="legend-color available"></span>
+            <span class="legend-text" data-i18n="status-available">Слободни</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color reserved"></span>
+            <span class="legend-text" data-i18n="status-reserved">Резервирани</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color sold"></span>
+            <span class="legend-text" data-i18n="status-sold">Продадени</span>
+        </div>
+    </div>
+
+    <!-- Mobile Filter Toggle Button - SHOW (when filters are hidden) -->
+    <div class="filter-toggle-button-show" id="filterToggleButtonShow" onclick="toggleFilterPanel()">
+        <span class="filter-toggle-text" data-i18n="show-filters">ФИЛТРИ</span>
+        <span class="filter-toggle-icon">▲</span>
+    </div>
+
+    <!-- STICKY FOOTER - CORRECTED LABELS: СПРАТ - СПАЛНИ СОБИ - ВКУПНО - ОТСТРАНИ МАСКИ -->
+    <div class="filters-panel" id="filtersPanel">
+        <!-- Mobile Filter Toggle Button - HIDE (when filters are visible) -->
+        <div class="filter-toggle-button-hide" id="filterToggleButtonHide" onclick="toggleFilterPanel()">
+            <span class="filter-toggle-text" data-i18n="hide-filters">СОКРИЈ ФИЛТРИ</span>
+            <span class="filter-toggle-icon">▼</span>
+        </div>
+
+        <!-- 1. Floors Filter - CORRECTED LABEL -->
+        <div class="filter-section">
+            <label class="filter-label" data-i18n="filter-floor">СПРАТ:</label>
+            <div class="slider-container">
+                <div class="slider-values" id="floorValues">
+                    <span>1</span>
+                    <span>24</span>
+                </div>
+                <div class="dual-slider-container" id="floorSliderContainer">
+                    <!-- Floor dual slider will be created here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Bedrooms Filter - CORRECTED LABEL -->
+        <div class="filter-section">
+            <label class="filter-label" data-i18n="filter-bedrooms">СПАЛНИ СОБИ:</label>
+            <div class="bedroom-filters" id="bedroomFilters">
+                <!-- Bedroom filter buttons will be populated here -->
+            </div>
+        </div>
+
+        <!-- 3. Area Filter - CORRECT LABEL -->
+        <div class="filter-section">
+            <label class="filter-label" data-i18n="filter-area">ВКУПНО (М²):</label>
+            <div class="slider-container">
+                <div class="slider-values" id="areaValues">
+                    <span>80</span>
+                    <span>160</span>
+                </div>
+                <div class="dual-slider-container" id="areaSliderContainer">
+                    <!-- Area dual slider will be created here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Clear Button -->
+        <div class="filter-actions">
+            <button class="filter-btn clear" onclick="clearAllFilters()" data-i18n="clear-filters">Отстрани маски</button>
+            <a href="https://www.rendexio.com" target="_blank" rel="noopener noreferrer" class="rendexio-link">www.rendexio.com</a>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/config.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/googleSheets.js"></script>
+    <script src="js/apartmentDetails.js"></script>
+    <script src="js/svgloader_final.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/leadsForm.js"></script>
+</body>
+</html>

@@ -1,0 +1,421 @@
+/* FIXED: Building Container and Visualization */
+.building-container {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    margin-bottom: 1rem; /* Space for sticky footer */
+}
+
+.background-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.background-image.active {
+    opacity: 1;
+}
+
+/* View Switcher */
+.view-switcher {
+    position: fixed;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.view-arrow {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(148, 163, 184, 0.3);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.view-arrow:hover {
+    background: rgba(15, 23, 42, 1);
+    transform: scale(1.05);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-orange);
+}
+
+.arrow-icon {
+    transition: var(--transition);
+    font-weight: bold;
+}
+
+.view-indicator {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* FIXED: SVG Overlay Styles */
+.svg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+    z-index: 10;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.svg-overlay svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* UPDATED: SVG Apartment Shape Styles */
+.apartment-shape {
+    pointer-events: all !important;
+    cursor: pointer !important;
+    transition: fill 0.3s ease, stroke 0.3s ease, opacity 0.3s ease !important;
+    opacity: 1 !important;
+}
+
+/* DEFAULT STATE - 30% opacity with white border 50% opacity */
+.apartment-shape {
+    fill: rgba(156, 163, 175, 0.3) !important;
+    stroke: rgba(255, 255, 255, 0.5) !important;
+    stroke-width: 1px !important;
+}
+
+/* AVAILABLE STATE - 30% opacity green with white border */
+.apartment-shape.available {
+    fill: rgba(16, 185, 129, 0.3) !important;
+    stroke: rgba(255, 255, 255, 0.5) !important;
+    stroke-width: 1px !important;
+}
+
+/* AVAILABLE HOVER/CLICK - 70% opacity NO border */
+.apartment-shape.available:hover,
+.apartment-shape.available.selected {
+    fill: rgba(16, 185, 129, 0.7) !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+}
+
+/* RESERVED STATE - 30% opacity blue with white border */
+.apartment-shape.reserved {
+    fill: rgba(59, 130, 246, 0.3) !important;
+    stroke: rgba(255, 255, 255, 0.5) !important;
+    stroke-width: 1px !important;
+}
+
+/* RESERVED HOVER/CLICK - 70% opacity NO border */
+.apartment-shape.reserved:hover,
+.apartment-shape.reserved.selected {
+    fill: rgba(59, 130, 246, 0.7) !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+}
+
+/* SOLD STATE - 30% opacity red with white border */
+.apartment-shape.sold {
+    fill: rgba(239, 68, 68, 0.3) !important;
+    stroke: rgba(255, 255, 255, 0.5) !important;
+    stroke-width: 1px !important;
+}
+
+/* SOLD HOVER/CLICK - 70% opacity NO border */
+.apartment-shape.sold:hover,
+.apartment-shape.sold.selected {
+    fill: rgba(239, 68, 68, 0.7) !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+}
+
+/* OFFICE SPACE STATE - 30% opacity orange with white border */
+.apartment-shape.office-space {
+    fill: rgba(255, 165, 0, 0.3) !important;
+    stroke: rgba(255, 255, 255, 0.5) !important;
+    stroke-width: 1px !important;
+}
+
+/* OFFICE SPACE HOVER/CLICK - 70% opacity orange NO border */
+/* OFFICE SPACE AVAILABLE - hover/click shows GREEN (like regular apartments) */
+.apartment-shape.office-space.available:hover,
+.apartment-shape.office-space.available.selected {
+    fill: rgba(16, 185, 129, 0.7) !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+}
+
+/* OFFICE SPACE RESERVED - hover/click shows BLUE (like regular apartments) */
+.apartment-shape.office-space.reserved:hover,
+.apartment-shape.office-space.reserved.selected {
+    fill: rgba(59, 130, 246, 0.7) !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+}
+
+/* OFFICE SPACE SOLD - hover/click shows RED (like regular apartments) */
+.apartment-shape.office-space.sold:hover,
+.apartment-shape.office-space.sold.selected {
+    fill: rgba(239, 68, 68, 0.7) !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+}
+
+/* HIDDEN STATE */
+.apartment-shape.hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    display: none !important;
+}
+
+/* Apartment Details Panel */
+.apartment-details {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 350px;
+    background: rgba(15, 23, 42, 1) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: var(--shadow-xl);
+    z-index: 400;
+    transition: var(--transition);
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.details-header h3 {
+    color: var(--accent-orange);
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.15rem 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.detail-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+.detail-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.detail-value.link {
+    color: var(--accent-teal);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.detail-value.link:hover {
+    color: #0891b2;
+}
+
+.status-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-badge.free {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--status-free);
+    border: 1px solid var(--status-free);
+}
+
+.status-badge.available {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--status-free);
+    border: 1px solid var(--status-free);
+}
+
+.status-badge.reserved {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--status-reserved);
+    border: 1px solid var(--status-reserved);
+}
+
+.status-badge.sold {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--status-sold);
+    border: 1px solid var(--status-sold);
+}
+
+/* Interested Button Styling */
+.interested-button {
+    display: inline-block !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    min-width: 160px !important;
+    /* Force override any inherited link styles */
+    -webkit-text-fill-color: white !important;
+    -webkit-appearance: none !important;
+}
+
+.interested-button:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 12px rgba(16, 185, 129, 0.4) !important;
+    color: white !important;
+    text-decoration: none !important;
+    -webkit-text-fill-color: white !important;
+}
+
+.interested-button:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3) !important;
+}
+
+.interested-button:visited {
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+    text-decoration: none !important;
+}
+
+.interested-button:focus {
+    outline: 2px solid rgba(16, 185, 129, 0.5) !important;
+    outline-offset: 2px !important;
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* Mobile Status Legend */
+.status-legend {
+    display: none; /* Hidden on desktop */
+    position: fixed;
+    bottom: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 16px;
+    padding: 12px 16px;
+    z-index: 150;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 4px;
+    border-radius: 2px;
+}
+
+.legend-color.available {
+    background: var(--status-free);
+}
+
+.legend-color.reserved {
+    background: var(--status-reserved);
+}
+
+.legend-color.sold {
+    background: var(--status-sold);
+}
+
+.legend-text {
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+}

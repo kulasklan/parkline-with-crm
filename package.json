@@ -1,0 +1,24 @@
+{
+  "name": "parkline-residences",
+  "version": "1.0.0",
+  "description": "Interactive apartment visualization for ParkLine Residences",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "apartment",
+    "visualization",
+    "interactive",
+    "real-estate"
+  ],
+  "author": "ParkLine Residences",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "supabase": "^2.39.2"
+  }
+}
