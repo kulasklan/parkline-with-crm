@@ -376,12 +376,12 @@ CREATE TRIGGER trigger_update_lead_notes_updated_at
 
 -- Insert default CRM settings
 INSERT INTO crm_settings (setting_key, setting_value, description) VALUES
-  ('auto_assign_leads', 'true', 'Automatically assign new leads to available agents'),
+  ('auto_assign_leads', '"true"', 'Automatically assign new leads to available agents'),
   ('lead_follow_up_days', '3', 'Default days for follow-up reminders'),
   ('max_leads_per_agent', '50', 'Maximum leads per agent before auto-assignment stops'),
-  ('business_hours_start', '09:00', 'Business hours start time'),
-  ('business_hours_end', '17:00', 'Business hours end time'),
-  ('email_notifications', 'true', 'Send email notifications for new leads')
+  ('business_hours_start', '"09:00"', 'Business hours start time'),
+  ('business_hours_end', '"17:00"', 'Business hours end time'),
+  ('email_notifications', '"true"', 'Send email notifications for new leads')
 ON CONFLICT (setting_key) DO NOTHING;
 
 -- Insert sample CRM admin user (you'll need to update this with real data)
