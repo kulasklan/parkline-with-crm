@@ -68,7 +68,9 @@ class CRMApp {
     // Handle authenticated user
     async handleAuthenticatedUser(user) {
         console.log('👤 User authenticated:', user.email);
-        
+        // ADD THIS LINE: Log the email being used for the query
+        console.log('DEBUG: Attempting to fetch CRM user for email:', user.email);
+
         // Get CRM user profile
         const { data: crmUser, error } = await this.supabase
             .from('crm_users')
@@ -76,22 +78,32 @@ class CRMApp {
             .eq('email', user.email)
             .single();
 
-        if (error || !crmUser) {
-            console.error('❌ CRM user not found:', error);
+        if (error) { // Check for error first
+            console.error('❌ CRM user query failed:', error); // ADD THIS LINE: Log the full error object
             await this.supabase.auth.signOut();
-            this.showError('Access denied. Your account is not authorized for CRM access.');
+            this.showError('Access denied. Your account is not authorized for CRM access. (Query Error)'); // Modified message for clarity
+            this.hideLoading();
+            return;
+        }
+
+        if (!crmUser) { // Then check if crmUser is null (no record found)
+            console.error('❌ CRM user not found for email:', user.email); // Modified message for clarity
+            await this.supabase.auth.signOut();
+            this.showError('Access denied. Your account is not authorized for CRM access. (User Not Found)'); // Modified message for clarity
+            this.hideLoading();
             return;
         }
 
         if (!crmUser.is_active) {
-            console.error('❌ CRM user is inactive');
+            console.error('❌ CRM user is inactive:', crmUser.email); // Modified message for clarity
             await this.supabase.auth.signOut();
             this.showError('Your account has been deactivated. Please contact an administrator.');
+            this.hideLoading();
             return;
         }
 
         this.currentUser = crmUser;
-        
+
         // Update last login
         await this.supabase
             .from('crm_users')
@@ -110,15 +122,18 @@ class CRMApp {
         this.showLoginScreen();
     }
 
-    // Show login screen
-    showLoginScreen() {
-        document.getElementById('loginScreen').style.display = 'flex';
-        document.getElementById('crmDashboard').style.display = 'none';
-        document.getElementById('loadingOverlay').style.display = 'none';
-        
-        // Setup login form
-        this.setupLoginForm();
-    }
+// Show login screen
+showLoginScreen() {
+    // Add this line here to clear any previous messages
+    this.showLoginMessage('', ''); // <--- ADD THIS LINE
+
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('crmDashboard').style.display = 'none';
+    document.getElementById('loadingOverlay').style.display = 'none';
+
+    // Setup login form
+    this.setupLoginForm();
+}
 
     // Show dashboard
     showDashboard() {
