@@ -56,8 +56,8 @@ window.CONFIG = {
     DEBUG: true,
     
     // Supabase Configuration for Analytics
-    SUPABASE_URL: 'https://pznmasitmormnbwvuktb.supabase.co',
-    SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6bm1hc2l0bW9ybW5id3Z1a3RiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4NTAyOTIsImV4cCI6MjA3MjQyNjI5Mn0.IgmAQ8mJNxMIf9uWtoGg69alCK8MmP12Roi4xaEcNEw'
+    SUPABASE_URL: 'https://zeolqofwalzanmcsvfkn.supabase.co',
+    SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inplb2xxb2Z3YWx6YW5tY3N2ZmtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0MjUzOTcsImV4cCI6MjA3NzAwMTM5N30.qK0tuJmpBg_DjzS2SR94fYUcSYa3N7sK8bdd9A959OQ'
 };
 
 // Utility functions
