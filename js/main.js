@@ -743,10 +743,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create mobile filter manager
     window.mobileFilterManager = new MobileFilterManager();
     
-    // Initialize Supabase client
-    if (window.SupabaseClient) {
-        window.SupabaseClient.initialize();
-        Utils.log('📊 Supabase client initialized successfully');
+    // Initialize HubSpot integration
+    if (window.HubSpotIntegration) {
+        window.HubSpotIntegration.initialize();
+        Utils.log('📊 HubSpot integration initialized successfully');
     }
 
     // Initialize the app

@@ -171,11 +171,11 @@ class LeadsFormManager {
         this.clearFormMessage();
         this.setSubmittingState(true);
 
-        // Ensure Supabase client is available
-        if (!window.SupabaseClient || !window.SupabaseClient.isInitialized) {
-            this.showFormMessage('Error: Database connection not available. Please try again later.', 'error');
+        // Ensure HubSpot integration is available
+        if (!window.HubSpotIntegration || !window.HubSpotIntegration.isInitialized) {
+            this.showFormMessage('Error: Integration not available. Please try again later.', 'error');
             this.setSubmittingState(false);
-            Utils.error('❌ Supabase client not found or not initialized');
+            Utils.error('❌ HubSpot Integration not found or not initialized');
             return;
         }
 
@@ -189,21 +189,21 @@ class LeadsFormManager {
             }
 
             if (this.debugMode) {
-                Utils.log('📝 Submitting lead data to Supabase:', formData);
+                Utils.log('📝 Submitting lead data to HubSpot:', formData);
             }
 
-            // Submit to Supabase
-            const result = await window.SupabaseClient.submitLead(formData);
+            // Submit to HubSpot
+            const result = await window.HubSpotIntegration.submitFormToHubSpot(formData);
 
             if (!result.success) {
-                Utils.error('❌ Error submitting lead to Supabase:', result.error);
+                Utils.error('❌ Error submitting lead to HubSpot:', result.error);
                 this.showFormMessage('Error submitting inquiry. Please try again or contact us directly.', 'error');
             } else {
                 this.showFormMessage('Inquiry submitted successfully! We will get back to you soon.', 'success');
                 this.form.reset();
 
                 if (this.debugMode) {
-                    Utils.log('✅ Lead submitted successfully to Supabase');
+                    Utils.log('✅ Lead submitted successfully to HubSpot');
                 }
 
                 // Auto-hide mobile form after successful submission
