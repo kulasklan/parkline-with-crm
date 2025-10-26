@@ -600,14 +600,6 @@ class FiltersManager {
             console.log(`✅ Added bedroom ${count} to filter`);
         }
         
-        // Track event with Analytics module
-        if (window.Analytics && window.Analytics.isInitialized) {
-            window.Analytics.trackFilterChange('bedroom_toggle', {
-                bedroom_count: count,
-                action: index > -1 ? 'removed' : 'added',
-                current_bedrooms: this.currentFilters.bedrooms
-            });
-        }
         
         this.applyFilters();
     }
@@ -629,13 +621,6 @@ class FiltersManager {
             totalApartments: googleSheetsManager.apartments.length
         });
         
-        // Track event with Analytics module
-        if (window.Analytics && window.Analytics.isInitialized) {
-            window.Analytics.trackFiltersApplied(
-                this.currentFilters, 
-                svgManager ? svgManager.currentView : 1
-            );
-        }
         
         if (svgManager) {
             svgManager.applyFilters(filteredApartments);
@@ -718,10 +703,6 @@ class FiltersManager {
             }
         }
         
-        // Track event with Analytics module
-        if (window.Analytics && window.Analytics.isInitialized) {
-            window.Analytics.trackFiltersClearRestore(actionType, this.currentFilters);
-        }
         
         this.applyFilters();
     }

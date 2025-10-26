@@ -743,15 +743,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create mobile filter manager
     window.mobileFilterManager = new MobileFilterManager();
     
-    // Initialize analytics
-    if (window.Analytics) {
-        window.Analytics.initialize().then(success => {
-            if (success) {
-                Utils.log('📊 Analytics initialized successfully');
-            } else {
-                Utils.warn('⚠️ Analytics initialization failed');
-            }
-        });
+    // Initialize HubSpot integration
+    if (window.HubSpotIntegration) {
+        window.HubSpotIntegration.initialize();
+        Utils.log('📊 HubSpot Integration initialized successfully');
     }
     
     // Initialize the app

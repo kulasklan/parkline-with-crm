@@ -283,10 +283,6 @@ setupApartmentShapes(overlay, viewNumber) {
         
         const apartment = googleSheetsManager.getApartmentById(apartmentId);
         if (apartment) {
-            // Track event with Analytics module
-            if (window.Analytics && window.Analytics.isInitialized) {
-                window.Analytics.trackApartmentClick(apartmentId, this.currentView, apartment);
-            }
             
             // Update selected state
             this.updateSelectedApartment(apartmentId);
@@ -297,13 +293,6 @@ setupApartmentShapes(overlay, viewNumber) {
             // Handle shapes without data
             Utils.warn(`No data found for apartment: ${apartmentId}`);
             
-            // Track event for unknown apartment clicks
-            if (window.Analytics && window.Analytics.isInitialized) {
-                window.Analytics.trackEvent('apartment_click_unknown', {
-                    apartment_id: apartmentId,
-                    view: this.currentView
-                });
-            }
             
             // Still show basic info
             const basicInfo = {
@@ -363,10 +352,6 @@ setupApartmentShapes(overlay, viewNumber) {
         
         Utils.log(`🔄 Switching from view ${this.currentView} to view ${newView}`);
         
-        // Track event with Analytics module
-        if (window.Analytics && window.Analytics.isInitialized) {
-            window.Analytics.trackViewSwitch(this.currentView, newView);
-        }
         
         // CRITICAL: Clear selected state when switching views
         this.clearSelectedState();

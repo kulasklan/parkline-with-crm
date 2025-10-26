@@ -54,10 +54,10 @@ window.CONFIG = {
     
     // Debug mode
     DEBUG: true,
-    
-    // Supabase Configuration for Analytics
-    SUPABASE_URL: 'https://zeolqofwalzanmcsvfkn.supabase.co',
-    SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inplb2xxb2Z3YWx6YW5tY3N2ZmtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0MjUzOTcsImV4cCI6MjA3NzAwMTM5N30.qK0tuJmpBg_DjzS2SR94fYUcSYa3N7sK8bdd9A959OQ'
+
+    // HubSpot Configuration
+    HUBSPOT_PORTAL_ID: '147144255',
+    HUBSPOT_FORM_GUID: null
 };
 
 // Utility functions

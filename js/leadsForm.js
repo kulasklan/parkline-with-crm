@@ -171,50 +171,39 @@ class LeadsFormManager {
         this.clearFormMessage();
         this.setSubmittingState(true);
 
-        // Ensure Supabase client is available
-        if (!window.supabase) {
-            this.showFormMessage('Error: Database connection not available. Please try again later.', 'error');
+        // Ensure HubSpot integration is available
+        if (!window.HubSpotIntegration || !window.HubSpotIntegration.isInitialized) {
+            this.showFormMessage('Error: HubSpot integration not available. Please try again later.', 'error');
             this.setSubmittingState(false);
-            Utils.error('❌ Supabase client not found on window object');
+            Utils.error('❌ HubSpot integration not found or not initialized');
             return;
         }
 
         try {
             // Collect and validate form data
             const formData = this.collectFormData();
-            
+
             if (!this.validateFormData(formData)) {
                 this.setSubmittingState(false);
                 return;
             }
 
             if (this.debugMode) {
-                Utils.log('📝 Submitting lead data:', formData);
+                Utils.log('📝 Submitting lead data to HubSpot:', formData);
             }
 
-            // Insert data into Supabase
-            const { data, error } = await window.supabase
-                .from('leads')
-                .insert([formData]);
+            // Submit to HubSpot
+            const result = await window.HubSpotIntegration.submitFormToHubSpot(formData);
 
-            if (error) {
-                Utils.error('❌ Error submitting lead:', error);
-                this.showFormMessage(`Error submitting inquiry: ${error.message}`, 'error');
+            if (!result.success) {
+                Utils.error('❌ Error submitting lead to HubSpot:', result.error);
+                this.showFormMessage('Error submitting inquiry. Please try again or contact us directly.', 'error');
             } else {
                 this.showFormMessage('Inquiry submitted successfully! We will get back to you soon.', 'success');
                 this.form.reset();
-                
-                // Track successful submission
-                if (window.Analytics && window.Analytics.isInitialized) {
-                    window.Analytics.trackEvent('lead_submitted', {
-                        apartment_id: formData.apartment_id,
-                        has_phone: !!formData.phone,
-                        message_length: formData.message.length
-                    });
-                }
-                
+
                 if (this.debugMode) {
-                    Utils.log('✅ Lead submitted successfully:', data);
+                    Utils.log('✅ Lead submitted successfully to HubSpot');
                 }
 
                 // Auto-hide mobile form after successful submission

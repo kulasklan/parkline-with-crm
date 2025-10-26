@@ -17,8 +17,5 @@
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0"
-  },
-  "devDependencies": {
-    "supabase": "^2.39.2"
   }
 }

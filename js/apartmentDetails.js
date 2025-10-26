@@ -202,10 +202,6 @@ class ApartmentDetailsManager {
                 console.log(`📧 User clicked interested button for apartment: ${apartment.id}`);
             }
             
-            // Track event with Analytics module
-            if (window.Analytics && window.Analytics.isInitialized) {
-                window.Analytics.trackInterestedButtonClick(apartment);
-            }
             
             // Optional: Track this event for analytics
             if (window.gtag) {
@@ -267,14 +263,6 @@ class ApartmentDetailsManager {
                 window.leadsFormManager.showForm(apartment.id);
             }
             
-            // Track event
-            if (window.Analytics && window.Analytics.isInitialized) {
-                window.Analytics.trackEvent('contact_button_click', {
-                    apartment_id: apartment.id,
-                    apartment_status: apartment.status,
-                    view: svgManager ? svgManager.currentView : 1
-                });
-            }
         });
         
         contactButton.addEventListener('mouseenter', () => {
