@@ -1062,3 +1062,56 @@ body {
         align-items: stretch;
     }
 }
+
+/* Toast Notifications */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.toast {
+    animation: slideIn 0.3s ease;
+}
+
+/* Lead Table Enhancements */
+.lead-message {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.apartment-tag {
+    background: var(--crm-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.lead-email {
+    color: var(--crm-secondary);
+    text-decoration: none;
+}
+
+.lead-email:hover {
+    text-decoration: underline;
+}

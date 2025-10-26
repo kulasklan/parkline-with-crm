@@ -743,12 +743,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create mobile filter manager
     window.mobileFilterManager = new MobileFilterManager();
     
-    // Initialize HubSpot integration
-    if (window.HubSpotIntegration) {
-        window.HubSpotIntegration.initialize();
-        Utils.log('📊 HubSpot Integration initialized successfully');
+    // Initialize Supabase client
+    if (window.SupabaseClient) {
+        window.SupabaseClient.initialize();
+        Utils.log('📊 Supabase client initialized successfully');
     }
-    
+
     // Initialize the app
     window.apartmentApp.initialize().catch(error => {
         Utils.error('Failed to initialize application:', error);
