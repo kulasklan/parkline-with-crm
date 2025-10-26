@@ -172,10 +172,17 @@ class LeadsFormManager {
         this.setSubmittingState(true);
 
         // Ensure HubSpot integration is available
-        if (!window.HubSpotIntegration || !window.HubSpotIntegration.isInitialized) {
-            this.showFormMessage('Error: Integration not available. Please try again later.', 'error');
+        if (!window.HubSpotIntegration) {
+            this.showFormMessage('Error: HubSpot integration not loaded. Please refresh the page and try again.', 'error');
             this.setSubmittingState(false);
-            Utils.error('❌ HubSpot Integration not found or not initialized');
+            Utils.error('❌ HubSpot Integration object not found');
+            return;
+        }
+
+        if (!window.HubSpotIntegration.isInitialized) {
+            this.showFormMessage('Error: HubSpot is still loading. Please wait a moment and try again.', 'error');
+            this.setSubmittingState(false);
+            Utils.error('❌ HubSpot Integration not initialized yet');
             return;
         }
 
@@ -197,14 +204,22 @@ class LeadsFormManager {
 
             if (!result.success) {
                 Utils.error('❌ Error submitting lead to HubSpot:', result.error);
-                this.showFormMessage('Error submitting inquiry. Please try again or contact us directly.', 'error');
-            } else {
-                this.showFormMessage('Inquiry submitted successfully! We will get back to you soon.', 'success');
-                this.form.reset();
 
+                // More specific error messages
+                let errorMessage = 'Error submitting inquiry. Please try again or contact us directly.';
+                if (result.error && result.error.includes('tracking script')) {
+                    errorMessage = 'HubSpot is not fully loaded yet. Please wait a moment and try again, or refresh the page.';
+                }
+
+                this.showFormMessage(errorMessage, 'error');
+            } else {
                 if (this.debugMode) {
                     Utils.log('✅ Lead submitted successfully to HubSpot');
+                    Utils.log('📊 Submission method:', result.method || 'API');
                 }
+
+                this.showFormMessage('Inquiry submitted successfully! We will get back to you soon.', 'success');
+                this.form.reset();
 
                 // Auto-hide mobile form after successful submission
                 if (this.isMobile && this.isVisible) {

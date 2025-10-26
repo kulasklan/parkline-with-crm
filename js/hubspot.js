@@ -10,9 +10,33 @@ class HubSpotIntegration {
         if (this.debugMode) {
             Utils.log('✅ HubSpot Integration initialized');
             Utils.log(`📊 Portal ID: ${this.portalId}`);
+            Utils.log(`📋 Form GUID: ${this.formGuid || 'Not configured (using tracking code method)'}`);
         }
         this.isInitialized = true;
+
+        // Wait for HubSpot tracking script to load
+        this.waitForHubSpotScript();
+
         return true;
+    }
+
+    waitForHubSpotScript() {
+        const maxAttempts = 50; // 5 seconds max wait
+        let attempts = 0;
+
+        const checkInterval = setInterval(() => {
+            attempts++;
+
+            if (typeof window._hsq !== 'undefined') {
+                clearInterval(checkInterval);
+                if (this.debugMode) {
+                    Utils.log('✅ HubSpot tracking script loaded successfully');
+                }
+            } else if (attempts >= maxAttempts) {
+                clearInterval(checkInterval);
+                Utils.warn('⚠️ HubSpot tracking script did not load within 5 seconds');
+            }
+        }, 100);
     }
 
     async submitFormToHubSpot(formData) {
@@ -80,7 +104,14 @@ class HubSpotIntegration {
 
     async submitDirectToHubSpot(formData) {
         try {
+            // Wait for HubSpot tracking script if needed
+            if (typeof window._hsq === 'undefined') {
+                Utils.warn('⚠️ HubSpot tracking code not loaded yet, waiting...');
+                await this.waitForTrackingScript();
+            }
+
             if (typeof window._hsq !== 'undefined') {
+                // Identify the contact
                 window._hsq.push(['identify', {
                     email: formData.email,
                     firstname: this.extractFirstName(formData.name),
@@ -88,6 +119,7 @@ class HubSpotIntegration {
                     phone: formData.phone || ''
                 }]);
 
+                // Track the lead submission event
                 window._hsq.push(['trackEvent', {
                     id: 'Lead Submitted',
                     value: {
@@ -98,17 +130,39 @@ class HubSpotIntegration {
 
                 if (this.debugMode) {
                     Utils.log('✅ Lead tracked via HubSpot tracking code');
+                    Utils.log('📧 Contact identified:', formData.email);
+                    Utils.log('🏢 Apartment ID:', formData.apartment_id || 'Not specified');
                 }
 
                 return { success: true, method: 'tracking_code' };
             } else {
-                Utils.warn('⚠️ HubSpot tracking code not loaded yet');
-                return { success: false, error: 'HubSpot tracking code not loaded' };
+                Utils.error('❌ HubSpot tracking code failed to load');
+                return {
+                    success: false,
+                    error: 'HubSpot tracking script not available. Please refresh the page and try again.'
+                };
             }
         } catch (error) {
             Utils.error('❌ Error with direct HubSpot submission:', error);
             return { success: false, error: error.message };
         }
+    }
+
+    async waitForTrackingScript() {
+        return new Promise((resolve) => {
+            const maxWait = 5000; // 5 seconds
+            const startTime = Date.now();
+
+            const checkInterval = setInterval(() => {
+                if (typeof window._hsq !== 'undefined') {
+                    clearInterval(checkInterval);
+                    resolve(true);
+                } else if (Date.now() - startTime > maxWait) {
+                    clearInterval(checkInterval);
+                    resolve(false);
+                }
+            }, 100);
+        });
     }
 
     extractFirstName(fullName) {

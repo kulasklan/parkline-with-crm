@@ -293,11 +293,23 @@
         </div>
     </div>
 
-    <script src="js/config.js"></script>
-    <script type="module" src="js/analytics-dashboard.js"></script>
-
-    <!-- Start of HubSpot Embed Code -->
+    <!-- HubSpot Tracking Code -->
     <script type="text/javascript" id="hs-script-loader" async defer src="//js-eu1.hs-scripts.com/147144255.js"></script>
-    <!-- End of HubSpot Embed Code -->
+
+    <script>
+        // Remove loading messages since analytics are managed by HubSpot
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('overallStats').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">📊</div>
+                    <div class="stat-label">Managed by HubSpot</div>
+                </div>
+            `;
+            document.getElementById('topApartments').innerHTML = '<div class="no-data">Analytics data is available in HubSpot Dashboard</div>';
+            document.getElementById('eventBreakdown').innerHTML = '<div class="no-data">Analytics data is available in HubSpot Dashboard</div>';
+            document.getElementById('recentEvents').innerHTML = '<div class="no-data">Analytics data is available in HubSpot Dashboard</div>';
+            document.getElementById('filterStats').innerHTML = '<div class="no-data">Analytics data is available in HubSpot Dashboard</div>';
+        });
+    </script>
 </body>
 </html>
